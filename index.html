@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Day Proposal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Dark Background Gradient */
+    .gradient-background {
+      background: linear-gradient(180deg, #1e002e 0%, #3a0048 50%, #5a006e 100%);
+      color: #ffb6c1;
+    }
+
+    /* Button Bounce Animation */
+    .bounce2 {
+      animation: bounce2 2s ease infinite;
+    }
+
+    @keyframes bounce2 {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-15px);
+      }
+      60% {
+        transform: translateY(-7px);
+      }
+    }
+
+    /* Yes Button */
+    .yes-button {
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      color: white;
+      font-size: 100px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #ff1493;
+    }
+
+    .yes-button:hover {
+      background: #ff1493;
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #ff1493;
+    }
+
+    /* No Button */
+    .no-button {
+      position: absolute;
+      background: rgba(255, 105, 180, 0.2);
+      border: 2px solid #ff69b4;
+      color: #ff69b4;
+      font-size: 25px;
+      padding: 10px 20px;
+      border-radius: 50px;
+      transition: all 0.2s ease, font-size 0.2s ease, padding 0.2s ease;
+    }
+
+    .no-button:hover {
+      background: rgba(255, 105, 180, 0.4);
+      color: #fff;
+    }
+
+    /* Heartfelt Message Box */
+    .message-box {
+      background: rgba(255, 105, 180, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+      padding: 20px;
+      text-align: left;
+      max-width: 500px;
+      margin-left: 20px; /* Space between image and message */
+    }
+
+    .message-box h2 {
+      color: #ffb6c1;
+      font-size: 26px;
+      font-family: 'Pacifico', cursive;
+    }
+
+    .message-box p {
+      color: #ffffff;
+      font-size: 18px;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .message-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .message-container img {
+      max-width: 500px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="gradient-background">
+  <div class="flex items-center justify-center h-screen relative">
+    <div class="flex flex-col items-center p-4">
+      <img id="imageDisplay" src="./images/image1.gif" alt="Cute kitten with flowers" class="rounded-md h-[300px]" style="object-fit: cover;" />
+      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#ffb6c1] my-4">Will you be my Valentine?</h2>
+      <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
+        <button id="yesButton" class="yes-button bounce2">
+          Yes!!! 💖
+        </button>
+        <button id="noButton" class="no-button">
+          No 😢
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import confetti from 'https://cdn.skypack.dev/canvas-confetti';
+
+    const yesButton = document.getElementById('yesButton');
+    const noButton = document.getElementById('noButton');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const valentineQuestion = document.getElementById('valentineQuestion');
+    const responseButtons = document.getElementById('responseButtons');
+
+    let noClickCount = 0;
+    let buttonHeight = 48;
+    let buttonWidth = 100;
+    let fontSize = 18;
+    const imagePaths = [
+      "./images/image1.gif",
+      "./images/image2.gif",
+      "./images/image3.gif",
+      "./images/image4.gif",
+      "./images/image5.gif",
+      "./images/image6.gif",
+      "./images/image7.gif"
+    ];
+
+    // Hide "Yes" button on page load
+    yesButton.style.display = "none";
+
+    function moveNoButton() {
+      const maxX = window.innerWidth - noButton.offsetWidth - 50; // Stay inside screen
+      const maxY = window.innerHeight - noButton.offsetHeight - 50; // Stay inside screen
+
+      const randomX = Math.max(50, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(50, Math.floor(Math.random() * maxY));
+
+      noButton.style.left = `${randomX}px`;
+      noButton.style.top = `${randomY}px`;
+
+      // Increase size and font each time
+      buttonWidth += 50;
+      buttonHeight += 35;
+      fontSize += 3;
+
+      noButton.style.width = `${buttonWidth}px`;
+      noButton.style.height = `${buttonHeight}px`;
+      noButton.style.fontSize = `${fontSize}px`;
+
+      // Adjust padding to keep text inside button
+      noButton.style.padding = "12px 24px";
+    }
+
+    noButton.addEventListener('click', function() {
+      if (noClickCount < 5) {
+        noClickCount++;
+        imageDisplay.src = imagePaths[noClickCount];
+
+        // Move "No" button before 5 clicks
+        moveNoButton();
+
+        if (noClickCount < 6) {
+          noButton.textContent = ["No", "Are you sure?", "Copper Plssssss", "Why not????? :(", "You're breaking my heart", "I'm gonna cry..."][noClickCount];
+        }
+
+        // Show "Yes" button after 5 clicks
+        if (noClickCount === 5) {
+          yesButton.style.display = "inline-flex";
+          noButton.style.display='none'
+        }
+      }
+    });
+
+    yesButton.addEventListener('click', () => {
+      // Hide the image
+      imageDisplay.style.display = 'none';
+
+      // Update the question text
+      valentineQuestion.textContent = "Yayyy!! :3";
+
+      // Hide both buttons
+      responseButtons.style.display = 'none';
+
+      // Create a new message container
+      const messageContainer = document.createElement('div');
+      messageContainer.classList.add("message-container");
+
+      // Add the heartfelt message
+      messageContainer.innerHTML = `
+        <img src="./images/image7.gif" alt="Heartfelt message image" class="rounded-md" />
+<div class="message-box">
+  <h2>💖 Happy Valentine's Day! 💖</h2>
+  <br>
+  <p>
+    Hi Bakbak,  
+    It's 4 AM, and I'm still writing code just so I can create a personal Valentine's Day application for my favorite person on the planet! And yes, it's totally free!!!!! Hope you like it~  
+  </p>
+  <br>
+  <p>
+    Thank you for an amazing year filled with fun, laughter, and even the tough times we've shared in BFT. I'm so grateful to have met you and to be spending our first but "NOT LAST" Valentine’s Day together.  
+  </p>
+  <br>
+  <p>
+    I'm also incredibly thankful to have you by my side, always supporting me, caring for me, and loving me for who I am. I promise to also support you, care for you and to love you MORE!  
+  </p>
+  <br>
+  <p class="mt-4 text-xl font-semibold text-[#ffb6c1]">白天黑夜，我的心永远爱你。</p>
+  <p class="mt-4 text-xl font-semibold text-[#ffb6c1]">I love you forever! 🥰</p>
+</div>
+
+      `;
+
+      // Append the message below the image container
+      document.querySelector('.flex.flex-col').appendChild(messageContainer);
+
+      // Confetti with lighter pink/white colors
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        colors: ['#ffb6c1', '#ffffff']
+      });
+    });
+  </script>  
+</body>
+</html>
