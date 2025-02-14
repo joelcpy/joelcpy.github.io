@@ -31,19 +31,19 @@
 
     /* Yes Button */
     .yes-button {
-      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      background: linear-gradient(135deg, #69d492, #073c23);
       color: white;
       font-size: 100px;
       padding: 12px 24px;
       border-radius: 50px;
       transition: all 0.3s ease;
-      box-shadow: 0 0 10px #ff1493;
+      box-shadow: 0 0 10px #073c23;
     }
 
     .yes-button:hover {
-      background: #ff1493;
+      background: #073c23;
       transform: scale(1.1);
-      box-shadow: 0 0 20px #ff1493;
+      box-shadow: 0 0 20px #073c23;
     }
 
     /* No Button */
@@ -100,6 +100,13 @@
   </style>
 </head>
 <body class="gradient-background">
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="./audio/background.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
   <div class="flex items-center justify-center h-screen relative">
     <div class="flex flex-col items-center p-4">
       <img id="imageDisplay" src="./images/image1.gif" alt="Cute kitten with flowers" class="rounded-md h-[300px]" style="object-fit: cover;" />
@@ -140,6 +147,13 @@
 
     // Hide "Yes" button on page load
     yesButton.style.display = "none";
+
+     // Play background music after any user interaction
+     document.addEventListener("click", () => {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(err => console.log("Autoplay blocked:", err));
+      }
+    });
 
     function moveNoButton() {
       const maxX = window.innerWidth - noButton.offsetWidth - 50; // Stay inside screen
